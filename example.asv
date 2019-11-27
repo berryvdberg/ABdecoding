@@ -5,18 +5,18 @@
 %--- v27112019
 % fieldtrip version
 
-% 
-% example of how to use 
-% cfg = [];
-% cfg.method          = svm
-% cfg.timestep        = [0 100;100 200]
-% cfg.channelgroups   =  {{'Oz'} {'POz'}}       
-% cfg.labels          = [0 1] etc
-% cfg.train           = randperm()
-% cfg.test            = -1*cfg.train
-% 
-% doDecoding(data)
-% %
+
+example of how to use 
+cfg = [];
+cfg.method          = svm
+cfg.timestep        = [0 100;100 200]
+cfg.channelgroups   =  {{'Oz'} {'POz'}}       
+cfg.labels          = [0 1] etc
+cfg.train           = randperm()
+cfg.test            = -1* 
+
+doDecoding(data)
+%
 
 global RUN
 addpath(RUN.fieldtrip)
