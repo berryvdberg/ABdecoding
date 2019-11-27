@@ -1,4 +1,3 @@
-
 %%%%%%%%%%%%%%%%%%%%%%%
 %--- AB decoding toolbox ---%
 %--- example matlab script -%
@@ -15,23 +14,34 @@
 % cfg.train           = randperm()
 % cfg.test            = -1*cfg.train
 % 
-% doDecoding(data)
-% %
+% 
+% % output = doDecoding(data)
+% output is data structured as followed
 
+
+% below is the example of how to use the script based on the example data
+% available from:  LINK
+% set global paths
 global RUN
-addpath(RUN.fieldtrip)
-subjects = find(RUN.include);
- 
- session = 1;
- 
-for iSub = 1:length(subjects)
-    disp('#==============#')
-    disp(['subject    ' num2str(iSub)])
-    disp('#==============#')
-     
-     load(fullfile('../dataPreproc', ['trialStruct' RUN.subjectID{subjects(iSub)} 'session' num2str(session) 'cue.mat']))
-     load(fullfile('../dataPreproc', ['data' RUN.subjectID{subjects(iSub)} 'session' num2str(session) 'cue.mat']))
-        
+RUN.rootpath = ''; cd(RUN.rootpath);
+RUN.datapath = '';
+RUN.subjectID = {'1','2'};
+RUN.fieldtrip = '';
+
+
+% set global plotting
+RUN.colormap = [];
+RUN.linetypes = [];
+RUN.linecolor = [];
+
+
+
+%%
+for iSub = 1:length(RUN.subjectID)
+
+    load(fullfile('../dataPreproc', ['trialStruct' RUN.subjectID{subjects(iSub)} 'session' num2str(session) 'cue.mat']))
+    load(fullfile('../dataPreproc', ['data' RUN.subjectID{subjects(iSub)} 'session' num2str(session) 'cue.mat']))
+    
     artefactEEG = any([trialStruct.artheog ...
         trialStruct.artThresh],2);
      
@@ -53,8 +63,16 @@ for iSub = 1:length(subjects)
     cfg.trials = ~artefactEEG & ismember(trialStruct.trialType,[106 107]);
     labels = trialStruct.trialType(cfg.trials);
     data = ft_timelockanalysis(cfg,data);
-     
-    %% select trials
+    
+    
+    %% THIS IS THE ONE WE HAVE TO CREATE
+    decodedData = doDecoding(data,cfg)
+    
+end
+    
+    
+    
+    %% DO DECODING??? select trials
     nperm = 50;
      cfg = [];
     cfg.timesteps = 0:0.1:1.3;
@@ -106,14 +124,7 @@ output{iSub} = performance;
          figure;plot(squeeze(mean(performance,1)))
             xticks = linspace(1,size(performance,2),numel(cfg.timesteps));
             set(gca,'Xtick',xticks,'xticklabel',cfg.timesteps)
-               
-            
-            
-             
-            
-            
-            
-end
+
 
 %% VISUALIZATION AND STATS
 % to do 
